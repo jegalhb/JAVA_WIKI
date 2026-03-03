@@ -1,0 +1,31 @@
+package com.smu8.javautil;
+
+import javax.swing.*; // 플랫폼간의 차이를 줄이도록 개선된 GUI
+import java.awt.*; // 자바의 초기 GUI
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
+public class L48Swing {
+    static void main(String[] args) {
+        //window == 창 > container == 배치 > component == 요소
+        JFrame frame = new JFrame("awt 창");
+        // 종료를 시키는방법들
+        /*frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+            }
+        });               */
+        WindowListener windowListener = new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.dispose(); // 윈도우 자원정리종료
+                System.exit(0); // jvm콘솔종료
+            }
+        };
+        frame.setBounds(0,0,200,200);
+        frame.setVisible(true);
+
+    }
+}
