@@ -82,11 +82,10 @@ public class MainWikiFrame extends JFrame {
             }
         });
 
-        // 4. [중요] 버튼들을 바구니에 담는다.
         buttonPanel.add(addBtn);
         buttonPanel.add(deleteBtn);
 
-        // 5. 검색창과 버튼들을 레이아웃에 배치한다.
+        // 검색창과 버튼들을 레이아웃에 배치.
         topPanel.add(buttonPanel, BorderLayout.WEST); // 왼쪽에 버튼 모음 배치
         topPanel.add(searchField, BorderLayout.CENTER);
 
@@ -98,7 +97,7 @@ public class MainWikiFrame extends JFrame {
     }
 
     /**
-     * [출력 갱신] 외부에서 데이터가 변경되었을 때 호출하는 메서드이다.
+     * 외부에서 데이터가 변경되었을 때 호출하는 메서드준비.
      */
     public void refreshList() {
         // 현재 선택된 카테고리를 유지하며 리스트를 다시 그린다.
@@ -106,8 +105,8 @@ public class MainWikiFrame extends JFrame {
     }
 
     /**
-     * 화면의 중앙부 중 왼쪽 영역(필터 버튼과 지식 목록)을 초기화하는 로직입니다.
-     * 사용자의 클릭 한 번이 어떤 데이터 필터링을 거쳐 리스트에 나타나는지 결정합니다.
+     * 화면의 중앙부 중 왼쪽 영역(필터 버튼과 지식 목록)을 초기화하는 로직.
+     * 사용자의 클릭 한 번이 어떤 데이터 필터링을 거쳐 리스트에 나타나는지 결정.
      */
     private void initCenterPanel() {
         // 왼쪽 전체를 감싸는 패널로, 상단에는 버튼을 아래에는 목록을 배치하기 위해 BorderLayout을 사용함
@@ -119,7 +118,7 @@ public class MainWikiFrame extends JFrame {
         filterPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         // 반복문을 사용하여 버튼 생성 로직을 간결하게 만들고 공통 스타일을 일괄 적용함
-        String[] categories = {"전체", "기초", "중급", "고급", "메소드 집합"};
+        String[] categories = {"전체", "기초", "중급", "고급", "메소드"};
         for (String cat : categories) {
             JButton btn = new JButton(cat);
 
@@ -253,7 +252,6 @@ public class MainWikiFrame extends JFrame {
                 // Consolas 대신 한글이 지원되는 'D2Coding'이나 '맑은 고딕'을 혼용합니다.
                 label.setFont(new Font("맑은 고딕", Font.BOLD, 15));
             } else if (line.startsWith("[설명]")) {
-                // [추가] '[설명]' 머릿말도 깔끔하게 지우고 싶다면 아래 로직 적용
                 label.setText(line.replace("[설명] ", ""));
                 label.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
             } else {
@@ -279,21 +277,11 @@ public class MainWikiFrame extends JFrame {
         scrollPane.repaint();
     }
 
-    /**
-     * 카테고리 버튼 클릭 시 호출되며, 전체 데이터 중 해당 카테고리만 골라 리스트로 전달함
-     * 이 작업 결과는 즉시 왼쪽 인덱스 목록의 변화로 이어짐
-     */
-    /**
-     * 카테고리 필터링 로직입니다.
-     * [이유] '전체' 보기에서도 '메소드' 항목은 제외하여 순수한 자바 개념만 노출하기 위함입니다.
-     * [영향] 이제 '메소드 집합' 버튼을 눌렀을 때만 메소드 관련 데이터가 리스트에 나타납니다.
-     */
     private void filterList(String category) {
         List<Concept> all = repository.findAll();
         listModel.clear();
 
         for (Concept c : all) {
-            // [수정 포인트]
             if (category.equals("전체")) {
                 // 전체를 선택했을 때는 '메소드' 카테고리가 아닌 것들만 리스트에 추가한다.
                 if (!c.getCategory().equals("메소드")) {
