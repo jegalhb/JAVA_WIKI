@@ -29,8 +29,332 @@ public class ConceptRepository {
                 .toList();
     }
 
-    private void initMethod(){
-        addConcept(new Concept("M01" ,"기본 메소드" ,"기초"));
+    private void initMethod() {
+        // 자바 개발의 기초부터 심화까지 실무 활용도가 가장 높은 메소드 50선이다.
+        // 이 데이터들은 리스트 모델로 전달되어 왼쪽 인덱스 화면의 핵심 콘텐츠가 된다.
+
+        // 1. 기초 입출력 및 시스템 (M01~M05)
+        addConcept(new Concept("M01", "System.out.println()", "메소드")
+                .addLine("콘솔창에 데이터를 출력하고 줄을 바꾼다. 가장 기본적인 디버깅 도구이다.")
+                .addLine("[코드] System.out.println(\"Hello Java\");"));
+        addConcept(new Concept("M02", "Scanner.nextLine()", "메소드")
+                .addLine("사용자가 엔터를 칠 때까지 입력한 문자열 전체를 읽어온다.")
+                .addLine("[코드] String str = sc.nextLine();"));
+        addConcept(new Concept("M03", "Scanner.nextInt()", "메소드")
+                .addLine("입력받은 토큰을 정수 타입으로 변환하여 가져온다.")
+                .addLine("[코드] int num = sc.nextInt();"));
+        addConcept(new Concept("M04", "System.currentTimeMillis()", "메소드")
+                .addLine("현재 시간을 밀리초 단위로 반환한다. 프로그램 실행 시간 측정에 사용한다.")
+                .addLine("[코드] long start = System.currentTimeMillis();"));
+        addConcept(new Concept("M05", "System.exit()", "메소드")
+                .addLine("현재 실행 중인 자바 가상 머신(JVM)을 강제로 종료시킨다.")
+                .addLine("[코드] System.exit(0);"));
+
+        // 2. 문자열 조작 String 클래스 (M06~M15)
+        addConcept(new Concept("M06", "String.equals()", "메소드")
+                .addLine("두 문자열의 실제 내용이 일치하는지 비교한다. 주소 비교(==)와 다르다.")
+                .addLine("[코드] if(str.equals(\"java\"))"));
+        addConcept(new Concept("M07", "String.length()", "메소드")
+                .addLine("문자열의 총 길이를 반환한다.")
+                .addLine("[코드] int len = str.length();"));
+        addConcept(new Concept("M08", "String.charAt()", "메소드")
+                .addLine("문자열에서 특정 인덱스에 위치한 문자(char) 하나를 추출한다.")
+                .addLine("[코드] char c = str.charAt(0);"));
+        addConcept(new Concept("M09", "String.substring()", "메소드")
+                .addLine("문자열의 일부를 잘라내어 새로운 문자열로 만든다.")
+                .addLine("[코드] String sub = str.substring(1, 4);"));
+        addConcept(new Concept("M10", "String.contains()", "메소드")
+                .addLine("문자열 내에 특정 문자열이 포함되어 있는지 확인한다.")
+                .addLine("[코드] boolean hasJava = str.contains(\"Java\");"));
+        addConcept(new Concept("M11", "String.replace()", "메소드")
+                .addLine("특정 문구나 패턴을 찾아 다른 문구로 치환한다.")
+                .addLine("[코드] String newStr = str.replace(\"A\", \"B\");"));
+        addConcept(new Concept("M12", "String.split()", "메소드")
+                .addLine("구분자를 기준으로 문자열을 쪼개어 배열로 만든다.")
+                .addLine("[코드] String[] parts = str.split(\",\");"));
+        addConcept(new Concept("M13", "String.trim()", "메소드")
+                .addLine("문자열 앞뒤에 있는 공백을 제거한다.")
+                .addLine("[코드] String clean = str.trim();"));
+        addConcept(new Concept("M14", "String.indexOf()", "메소드")
+                .addLine("특정 문자가 시작되는 위치(인덱스)를 찾는다. 없으면 -1을 반환한다.")
+                .addLine("[코드] int idx = str.indexOf(\"C\");"));
+        addConcept(new Concept("M15", "String.toLowerCase()", "메소드")
+                .addLine("문자열의 모든 문자를 소문자로 변환한다.")
+                .addLine("[코드] String low = str.toLowerCase();"));
+
+        // 3. 숫자 및 수학 Math 클래스 (M16~M20)
+        addConcept(new Concept("M16", "Math.random()", "메소드")
+                .addLine("0.0 이상 1.0 미만의 랜덤한 실수를 생성한다.")
+                .addLine("[코드] double rand = Math.random();"));
+        addConcept(new Concept("M17", "Math.abs()", "메소드")
+                .addLine("숫자의 절대값을 구한다.")
+                .addLine("[코드] int plus = Math.abs(-10);"));
+        addConcept(new Concept("M18", "Math.max()", "메소드")
+                .addLine("두 수 중 더 큰 값을 반환한다.")
+                .addLine("[코드] int high = Math.max(5, 10);"));
+        addConcept(new Concept("M19", "Math.sqrt()", "메소드")
+                .addLine("숫자의 제곱근을 구한다.")
+                .addLine("[코드] double root = Math.sqrt(16); // 4.0"));
+        addConcept(new Concept("M20", "Math.round()", "메소드")
+                .addLine("실수를 소수점 첫째 자리에서 반올림하여 정수로 만든다.")
+                .addLine("[코드] long r = Math.round(3.5); // 4"));
+
+        // 4. 데이터 변환 및 래퍼 클래스 (M21~M25)
+        addConcept(new Concept("M21", "Integer.parseInt()", "메소드")
+                .addLine("문자열을 정수(int)로 변환한다.")
+                .addLine("[코드] int i = Integer.parseInt(\"10\");"));
+        addConcept(new Concept("M22", "Integer.toString()", "메소드")
+                .addLine("정수를 문자열로 변환한다.")
+                .addLine("[코드] String s = Integer.toString(10);"));
+        addConcept(new Concept("M23", "String.valueOf()", "메소드")
+                .addLine("다양한 타입의 값을 문자열로 변환하는 범용 메소드이다.")
+                .addLine("[코드] String v = String.valueOf(true);"));
+        addConcept(new Concept("M24", "Double.parseDouble()", "메소드")
+                .addLine("문자열을 실수(double)로 변환한다.")
+                .addLine("[코드] double d = Double.parseDouble(\"3.14\");"));
+        addConcept(new Concept("M25", "Character.isDigit()", "메소드")
+                .addLine("문자가 숫자인지 여부를 판별한다.")
+                .addLine("[코드] boolean isNum = Character.isDigit('5');"));
+
+        // 5. 컬렉션 - List (M26~M30)
+        addConcept(new Concept("M26", "List.add()", "메소드")
+                .addLine("리스트에 새로운 요소를 추가한다.")
+                .addLine("[코드] list.add(\"data\");"));
+        addConcept(new Concept("M27", "List.get()", "메소드")
+                .addLine("지정한 인덱스의 요소를 가져온다.")
+                .addLine("[코드] String item = list.get(0);"));
+        addConcept(new Concept("M28", "List.size()", "메소드")
+                .addLine("리스트에 저장된 요소의 개수를 반환한다.")
+                .addLine("[코드] int count = list.size();"));
+        addConcept(new Concept("M29", "List.remove()", "메소드")
+                .addLine("특정 인덱스나 객체를 리스트에서 삭제한다.")
+                .addLine("[코드] list.remove(0);"));
+        addConcept(new Concept("M30", "List.clear()", "메소드")
+                .addLine("리스트의 모든 요소를 삭제하여 비운다.")
+                .addLine("[코드] list.clear();"));
+
+        // 6. 컬렉션 - Map (M31~M35)
+        addConcept(new Concept("M31", "Map.put()", "메소드")
+                .addLine("키(Key)와 값(Value) 쌍을 저장한다.")
+                .addLine("[코드] map.put(\"id\", \"admin\");"));
+        addConcept(new Concept("M32", "Map.get()", "메소드")
+                .addLine("키를 이용해 대응하는 값을 찾아온다.")
+                .addLine("[코드] String val = map.get(\"id\");"));
+        addConcept(new Concept("M33", "Map.containsKey()", "메소드")
+                .addLine("특정 키가 맵에 존재하는지 확인한다.")
+                .addLine("[코드] if(map.containsKey(\"id\"))"));
+        addConcept(new Concept("M34", "Map.keySet()", "메소드")
+                .addLine("맵에 저장된 모든 키들을 Set 형태로 반환한다.")
+                .addLine("[코드] for(String key : map.keySet())"));
+        addConcept(new Concept("M35", "Map.values()", "메소드")
+                .addLine("맵에 저장된 모든 값들을 Collection 형태로 반환한다.")
+                .addLine("[코드] Collection<String> vals = map.values();"));
+
+        // 7. 객체 공통 및 유틸리티 (M36~M40)
+        addConcept(new Concept("M36", "Object.toString()", "메소드")
+                .addLine("객체의 정보를 문자열로 반환하도록 재정의하여 사용한다.")
+                .addLine("[코드] @Override public String toString()"));
+        addConcept(new Concept("M37", "Object.getClass()", "메소드")
+                .addLine("실행 중인 객체의 클래스 정보를 가져온다.")
+                .addLine("[코드] Class<?> cls = obj.getClass();"));
+        addConcept(new Concept("M38", "Arrays.sort()", "메소드")
+                .addLine("배열의 요소들을 오름차순으로 정렬한다.")
+                .addLine("[코드] Arrays.sort(arr);"));
+        addConcept(new Concept("M39", "Arrays.asList()", "메소드")
+                .addLine("배열을 고정 크기의 리스트로 변환한다.")
+                .addLine("[코드] List<String> l = Arrays.asList(arr);"));
+        addConcept(new Concept("M40", "Collections.shuffle()", "메소드")
+                .addLine("리스트의 요소 순서를 무작위로 섞는다.")
+                .addLine("[코드] Collections.shuffle(list);"));
+
+        // 8. 날짜 및 시간 (M41~M45)
+        addConcept(new Concept("M41", "LocalDate.now()", "메소드")
+                .addLine("현재 날짜 정보를 가져온다.")
+                .addLine("[코드] LocalDate date = LocalDate.now();"));
+        addConcept(new Concept("M42", "LocalTime.now()", "메소드")
+                .addLine("현재 시간 정보를 가져온다.")
+                .addLine("[코드] LocalTime time = LocalTime.now();"));
+        addConcept(new Concept("M43", "LocalDateTime.format()", "메소드")
+                .addLine("날짜와 시간을 원하는 형식의 문자열로 변환한다.")
+                .addLine("[코드] now.format(DateTimeFormatter.ofPattern(\"yyyy-MM-dd\"))"));
+        addConcept(new Concept("M44", "Thread.sleep()", "메소드")
+                .addLine("현재 실행 중인 스레드를 일정 시간 동안 멈춘다.")
+                .addLine("[코드] Thread.sleep(1000); // 1초 정지"));
+        addConcept(new Concept("M45", "Objects.requireNonNull()", "메소드")
+                .addLine("객체가 null인지 체크하고, null이면 예외를 발생시킨다.")
+                .addLine("[코드] Objects.requireNonNull(obj, \"데이터가 없습니다\");"));
+
+        // 9. 스트림 및 고급 (M46~M50)
+        addConcept(new Concept("M46", "Stream.filter()", "메소드")
+                .addLine("조건에 맞는 데이터만 걸러낸다.")
+                .addLine("[코드] stream.filter(x -> x > 5)"));
+        addConcept(new Concept("M47", "Stream.map()", "메소드")
+                .addLine("각 요소를 특정 형태로 변환한다.")
+                .addLine("[코드] stream.map(String::toUpperCase)"));
+        addConcept(new Concept("M48", "Stream.collect()", "메소드")
+                .addLine("스트림 연산 결과를 다시 리스트 등으로 수집한다.")
+                .addLine("[코드] .collect(Collectors.toList())"));
+        addConcept(new Concept("M49", "Optional.ofNullable()", "메소드")
+                .addLine("null일 수도 있는 객체를 안전하게 감싼다.")
+                .addLine("[코드] Optional<String> opt = Optional.ofNullable(str);"));
+        addConcept(new Concept("M50", "String.format()", "메소드")
+                .addLine("서식 문자열을 이용해 가독성 있는 문자열을 만든다.")
+                .addLine("[코드] String s = String.format(\"이름: %s\", name);"));
+        // [51-70] 데이터 구조 및 컬렉션 심화
+        addConcept(new Concept("M51", "Map.put()", "메소드")
+                .addLine("키(Key)와 값(Value) 쌍을 저장소에 저장한다.")
+                .addLine("[코드] map.put(\"id\", \"user01\");"));
+        addConcept(new Concept("M52", "Map.get()", "메소드")
+                .addLine("저장된 키를 이용해 그에 대응하는 값을 찾아온다.")
+                .addLine("[코드] String value = map.get(\"id\");"));
+        addConcept(new Concept("M53", "Map.containsKey()", "메소드")
+                .addLine("특정 키가 맵에 존재하는지 여부를 확인한다.")
+                .addLine("[코드] if(map.containsKey(\"id\"))"));
+        addConcept(new Concept("M54", "Map.keySet()", "메소드")
+                .addLine("맵에 저장된 모든 키들을 Set 형태로 추출한다.")
+                .addLine("[코드] for(String key : map.keySet())"));
+        addConcept(new Concept("M55", "Map.values()", "메소드")
+                .addLine("맵에 저장된 모든 값들을 Collection 형태로 추출한다.")
+                .addLine("[코드] Collection<String> vals = map.values();"));
+        addConcept(new Concept("M56", "Set.add()", "메소드")
+                .addLine("데이터를 중복 없이 집합에 추가한다.")
+                .addLine("[코드] set.add(\"Java\");"));
+        addConcept(new Concept("M57", "Set.contains()", "메소드")
+                .addLine("집합 내에 특정 데이터가 있는지 확인한다.")
+                .addLine("[코드] boolean exists = set.contains(\"Java\");"));
+        addConcept(new Concept("M58", "Collections.sort()", "메소드")
+                .addLine("리스트의 요소들을 오름차순으로 자동 정렬한다.")
+                .addLine("[코드] Collections.sort(list);"));
+        addConcept(new Concept("M59", "Collections.shuffle()", "메소드")
+                .addLine("리스트 요소들의 순서를 무작위로 뒤섞는다.")
+                .addLine("[코드] Collections.shuffle(list);"));
+        addConcept(new Concept("M60", "Iterator.next()", "메소드")
+                .addLine("반복자에서 다음 요소를 하나씩 꺼내온다.")
+                .addLine("[코드] String item = iterator.next();"));
+        addConcept(new Concept("M61", "ArrayList.indexOf()", "메소드")
+                .addLine("리스트에서 특정 요소가 위치한 번호를 찾는다.")
+                .addLine("[코드] int idx = list.indexOf(\"B\");"));
+        addConcept(new Concept("M62", "HashMap.replace()", "메소드")
+                .addLine("지정한 키에 해당하는 값을 새로운 값으로 교체한다.")
+                .addLine("[코드] map.replace(\"key\", \"newValue\");"));
+        addConcept(new Concept("M63", "Stack.push()", "메소드")
+                .addLine("스택의 맨 위에 데이터를 쌓는다.")
+                .addLine("[코드] stack.push(data);"));
+        addConcept(new Concept("M64", "Stack.pop()", "메소드")
+                .addLine("스택의 맨 위에서 데이터를 꺼내며 제거한다.")
+                .addLine("[코드] Object top = stack.pop();"));
+        addConcept(new Concept("M65", "Queue.offer()", "메소드")
+                .addLine("큐의 맨 뒤에 데이터를 대기열로 추가한다.")
+                .addLine("[코드] queue.offer(\"Task\");"));
+        addConcept(new Concept("M66", "Queue.poll()", "메소드")
+                .addLine("큐의 맨 앞에서 데이터를 꺼내며 제거한다.")
+                .addLine("[코드] Object task = queue.poll();"));
+        addConcept(new Concept("M67", "Arrays.toString()", "메소드")
+                .addLine("배열의 모든 요소를 문자열 형태로 한눈에 보여준다.")
+                .addLine("[코드] System.out.println(Arrays.toString(arr));"));
+        addConcept(new Concept("M68", "Arrays.binarySearch()", "메소드")
+                .addLine("정렬된 배열에서 이진 검색으로 값을 고속 탐색한다.")
+                .addLine("[코드] int pos = Arrays.binarySearch(arr, key);"));
+        addConcept(new Concept("M69", "Properties.getProperty()", "메소드")
+                .addLine("설정 파일(.properties)에서 키에 맞는 값을 읽어온다.")
+                .addLine("[코드] String dbUrl = prop.getProperty(\"url\");"));
+        addConcept(new Concept("M70", "Collections.reverse()", "메소드")
+                .addLine("리스트 요소들의 순서를 정반대로 뒤집는다.")
+                .addLine("[코드] Collections.reverse(list);"));
+
+        // [71-85] 스트림 및 함수형 프로그래밍
+        addConcept(new Concept("M71", "Stream.filter()", "메소드")
+                .addLine("조건에 맞는 데이터만 골라내어 다음 단계로 보낸다.")
+                .addLine("[코드] stream.filter(n -> n > 10)"));
+        addConcept(new Concept("M72", "Stream.map()", "메소드")
+                .addLine("각 요소를 다른 형태나 값으로 변환한다.")
+                .addLine("[코드] stream.map(String::toUpperCase)"));
+        addConcept(new Concept("M73", "Stream.collect()", "메소드")
+                .addLine("스트림 연산 결과를 리스트나 셋 등으로 최종 수집한다.")
+                .addLine("[코드] .collect(Collectors.toList())"));
+        addConcept(new Concept("M74", "Stream.forEach()", "메소드")
+                .addLine("각 요소에 대해 지정된 액션을 반복 실행한다.")
+                .addLine("[코드] stream.forEach(System.out::println)"));
+        addConcept(new Concept("M75", "Stream.sorted()", "메소드")
+                .addLine("스트림 내부의 데이터를 정렬한다.")
+                .addLine("[코드] stream.sorted()"));
+        addConcept(new Concept("M76", "Optional.ofNullable()", "메소드")
+                .addLine("null일 수도 있는 객체를 안전하게 감싸서 NPE를 방지한다.")
+                .addLine("[코드] Optional.ofNullable(data)"));
+        addConcept(new Concept("M77", "Optional.orElse()", "메소드")
+                .addLine("값이 없을 경우에 사용할 기본값을 지정한다.")
+                .addLine("[코드] opt.orElse(\"기본값\")"));
+        addConcept(new Concept("M78", "Stream.distinct()", "메소드")
+                .addLine("스트림에서 중복된 요소를 제거한다.")
+                .addLine("[코드] stream.distinct()"));
+        addConcept(new Concept("M79", "Stream.limit()", "메소드")
+                .addLine("스트림 처리 개수를 일정 숫자로 제한한다.")
+                .addLine("[코드] stream.limit(5)"));
+        addConcept(new Concept("M80", "Stream.anyMatch()", "메소드")
+                .addLine("조건을 만족하는 요소가 하나라도 있는지 확인한다.")
+                .addLine("[코드] boolean match = stream.anyMatch(x -> x < 0);"));
+        addConcept(new Concept("M81", "IntStream.range()", "메소드")
+                .addLine("특정 범위의 정수 연속체를 생성한다.")
+                .addLine("[코드] IntStream.range(1, 10)"));
+        addConcept(new Concept("M82", "Collectors.joining()", "메소드")
+                .addLine("스트림 요소들을 하나의 문자열로 결합한다.")
+                .addLine("[코드] collect(Collectors.joining(\", \"))"));
+        addConcept(new Concept("M83", "Optional.ifPresent()", "메소드")
+                .addLine("값이 존재할 때만 특정 로직을 실행한다.")
+                .addLine("[코드] opt.ifPresent(val -> log(val));"));
+        addConcept(new Concept("M84", "Stream.count()", "메소드")
+                .addLine("스트림에 포함된 요소의 총 개수를 반환한다.")
+                .addLine("[코드] long total = stream.count();"));
+        addConcept(new Concept("M85", "Stream.reduce()", "메소드")
+                .addLine("모든 요소를 하나의 결과값으로 결합한다(누적 계산).")
+                .addLine("[코드] stream.reduce(0, (a, b) -> a + b)"));
+
+        // [86-100] 날짜, 시간 및 시스템 유틸리티
+        addConcept(new Concept("M86", "LocalDate.now()", "메소드")
+                .addLine("현재 날짜 정보를 시스템으로부터 가져온다.")
+                .addLine("[코드] LocalDate today = LocalDate.now();"));
+        addConcept(new Concept("M87", "LocalTime.now()", "메소드")
+                .addLine("현재 시간 정보를 시스템으로부터 가져온다.")
+                .addLine("[코드] LocalTime now = LocalTime.now();"));
+        addConcept(new Concept("M88", "LocalDateTime.of()", "메소드")
+                .addLine("특정 날짜와 시간을 지정하여 객체를 생성한다.")
+                .addLine("[코드] LocalDateTime.of(2026, 3, 4, 15, 30)"));
+        addConcept(new Concept("M89", "DateTimeFormatter.ofPattern()", "메소드")
+                .addLine("날짜를 표시할 특정 서식 형식을 정의한다.")
+                .addLine("[코드] DateTimeFormatter.ofPattern(\"yyyy-MM-dd\")"));
+        addConcept(new Concept("M90", "Thread.sleep()", "메소드")
+                .addLine("현재 실행 중인 코드를 지정된 밀리초 동안 일시 정지한다.")
+                .addLine("[코드] Thread.sleep(1000);"));
+        addConcept(new Concept("M91", "Objects.requireNonNull()", "메소드")
+                .addLine("객체가 null이면 즉시 예외를 발생시켜 에러를 조기 발견한다.")
+                .addLine("[코드] Objects.requireNonNull(obj);"));
+        addConcept(new Concept("M92", "System.getenv()", "메소드")
+                .addLine("운영체제에 설정된 환경 변수 값을 읽어온다.")
+                .addLine("[코드] String path = System.getenv(\"JAVA_HOME\");"));
+        addConcept(new Concept("M93", "File.exists()", "메소드")
+                .addLine("하드디스크에 실제 파일이나 폴더가 존재하는지 확인한다.")
+                .addLine("[코드] if(file.exists())"));
+        addConcept(new Concept("M94", "File.createNewFile()", "메소드")
+                .addLine("비어 있는 새로운 파일을 물리적으로 생성한다.")
+                .addLine("[코드] file.createNewFile();"));
+        addConcept(new Concept("M95", "Files.write()", "메소드")
+                .addLine("파일에 데이터를 바이트 단위로 기록한다.")
+                .addLine("[코드] Files.write(path, content.getBytes());"));
+        addConcept(new Concept("M96", "Files.readAllLines()", "메소드")
+                .addLine("텍스트 파일의 모든 내용을 줄 단위로 한꺼번에 읽어온다.")
+                .addLine("[코드] List<String> lines = Files.readAllLines(path);"));
+        addConcept(new Concept("M97", "Thread.start()", "메소드")
+                .addLine("새로운 작업 줄기(스레드)를 독립적으로 실행시킨다.")
+                .addLine("[코드] thread.start();"));
+        addConcept(new Concept("M98", "Random.nextInt()", "메소드")
+                .addLine("지정된 범위 내에서 임의의 정수 난수를 생성한다.")
+                .addLine("[코드] int r = random.nextInt(100);"));
+        addConcept(new Concept("M99", "String.isBlank()", "메소드")
+                .addLine("문자열이 비어있거나 공백 문자로만 구성되었는지 확인한다.")
+                .addLine("[코드] if(str.isBlank())"));
+        addConcept(new Concept("M100", "Object.getClass()", "메소드")
+                .addLine("현재 객체의 실제 클래스 정보(타입)를 가져온다.")
+                .addLine("[코드] Class<?> cls = obj.getClass();"));
     }
 
     private void initBasicConcepts() {

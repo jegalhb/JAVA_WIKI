@@ -94,11 +94,6 @@ public class MainWikiFrame extends JFrame {
             btn.setFont(new Font("맑은 고딕", Font.BOLD, 12));
             btn.setMargin(new Insets(2, 2, 2, 2));
 
-            // '메소드 집합' 버튼을 시각적으로 강조하여 일반 카테고리와 차별화된 기능을 제공함을 알림
-            if (cat.equals("메소드 집합")) {
-                btn.setBackground(new Color(100, 149, 237));
-                btn.setForeground(Color.WHITE);
-            }
 
             // 버튼 클릭 시 발생하는 데이터 흐름을 정의함
             // 사용자가 누른 버튼의 텍스트(cat)에 따라 repository에서 서로 다른 리스트를 가져와 화면을 갱신함
@@ -213,27 +208,30 @@ public class MainWikiFrame extends JFrame {
             JLabel label = new JLabel();
             label.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-            // [H2]로 시작하는 줄은 소제목으로 인식하여 폰트를 키우고 진하게 처리함
             if (line.startsWith("[H2]")) {
+                // 소제목 처리
                 label.setText(line.replace("[H2] ", ""));
                 label.setFont(new Font("맑은 고딕", Font.BOLD, 19));
                 label.setForeground(new Color(44, 62, 80));
                 detailPanel.add(Box.createVerticalStrut(10));
-            }
-            // [코드]로 시작하는 줄은 파란색 강조와 프로그래밍 전용 폰트(Consolas)를 적용함
-            else if (line.startsWith("[코드]")) {
-                label.setText(line);
+            } else if (line.startsWith("[코드]")) {
+                // [수정] '[코드]' 텍스트를 제거하고 폰트를 한글 지원 폰트로 교체
+                String codeText = line.replace("[코드] ", "");
+                label.setText(codeText);
                 label.setForeground(Color.BLUE);
-                label.setFont(new Font("Consolas", Font.BOLD, 15));
-            }
-            // 일반 설명 문구 처리
-            else {
+                // Consolas 대신 한글이 지원되는 'D2Coding'이나 '맑은 고딕'을 혼용합니다.
+                label.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+            } else if (line.startsWith("[설명]")) {
+                // [추가] '[설명]' 머릿말도 깔끔하게 지우고 싶다면 아래 로직 적용
+                label.setText(line.replace("[설명] ", ""));
+                label.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
+            } else {
                 label.setText(line);
                 label.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
             }
 
             detailPanel.add(label);
-            detailPanel.add(Box.createVerticalStrut(7)); // 줄 사이의 가독성을 위한 간격
+            detailPanel.add(Box.createVerticalStrut(7));
         }
 
         // 내용이 적을 경우 본문을 위로 밀어올려 배치를 깔끔하게 유지함

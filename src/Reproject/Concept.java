@@ -55,7 +55,6 @@ public class Concept {
 
     /**
      *  JList 등 UI 컴포넌트에서 객체를 출력할 때 제목이 바로 보이게 하기 위함
-     *  이 메서드가 없으면 리스트에 외계어(주소값)가 나오지만, 이걸 써서 '제목'이 예쁘게 나옴
      */
     @Override
     public String toString() { return title; }
