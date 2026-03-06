@@ -25,7 +25,7 @@ public class MainWikiFrame extends JFrame {
 
         setTitle("Java Wiki - 실시간 협업 자바 학습 시스템");
         setSize(1100, 850);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
         initTopPanel();
