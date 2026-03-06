@@ -101,6 +101,10 @@ flowchart LR
 - 엔터 키 검색 동작 개선
 - 소켓 통신 미반영 이슈 수정
 - 프로그램 시작 시 출력 잘림 이슈 수정
+- IO 세부 구현완료
+- DISPOSE_ON_CLOSE로 변경
+- README.md 작성 및 이후 개선사항 정리
+- 클래스 별 주석작업 진행중
 
 ## 파일 기반 저장소 업데이트 (추가)
 - `ConceptRepository`는 시작 시 `data.txt`를 읽어서 메모리(Map)로 로드합니다.
