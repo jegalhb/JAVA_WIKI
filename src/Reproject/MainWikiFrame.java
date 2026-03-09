@@ -51,7 +51,7 @@ public class MainWikiFrame extends JFrame {
     public void setClient(WikiClient client) {
         this.client = client;
         if (client != null) {
-            setStatusText("오프라인 모드");
+            setStatusText("온라인 모드");
         }
     }
 
