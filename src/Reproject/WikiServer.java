@@ -3,7 +3,7 @@ package Reproject;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-
+// 온라인 모드 데이터 유실 문제 발생
 public class WikiServer {
     private static final int PORT = 9999;
     private ConceptRepository repository;
@@ -78,7 +78,7 @@ public class WikiServer {
         @Override
         public void run() {
             try {
-                // [중요] 스트림 생성 순서를 클라이언트와 맞춥니다.
+                //  스트림 생성 순서를 클라이언트와 맞춥니다.
                 out = new ObjectOutputStream(socket.getOutputStream());
                 out.flush(); // 생성 즉시 헤더를 밀어내어 교착상태 방지
                 in = new ObjectInputStream(socket.getInputStream());
