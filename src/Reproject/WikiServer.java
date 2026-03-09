@@ -90,10 +90,12 @@ public class WikiServer {
                     if (command.equals("ADD")) {
                         Concept c = (Concept) in.readObject();
                         repository.addConcept(c);
+                        repository.save();
                         broadcast("REFRESH", null);
                     } else if (command.equals("DELETE")) {
                         String id = in.readUTF();
                         repository.deleteConcept(id);
+                        repository.save();
                         broadcast("REFRESH", null);
                     } else if (command.equals("LIST")) {
                         out.writeUTF("LIST_DATA");
