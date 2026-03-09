@@ -106,6 +106,9 @@ flowchart LR
 - README.md 작성 및 이후 개선사항 정리
 - 클래스 별 주석작업 진행중
 
+5. 2026-03-09
+-작성해야해용 
+
 ## 파일 기반 저장소 업데이트 (추가)
 - `ConceptRepository`는 시작 시 `data.txt`를 읽어서 메모리(Map)로 로드합니다.
 - 종료 시 `repository.save()` 호출로 현재 메모리 상태를 `data.txt`에 저장합니다.

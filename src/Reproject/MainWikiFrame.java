@@ -6,10 +6,11 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
+import java.util.Locale;
 
 public class MainWikiFrame extends JFrame {
-    private SearchService searchService;
-    private ConceptRepository repository;
+    private final SearchService searchService;
+    private final ConceptRepository repository;
     private WikiClient client;
 
     private JScrollPane scrollPane;
@@ -37,6 +38,7 @@ public class MainWikiFrame extends JFrame {
 
         updateList(repository.findAll());
         setLocationRelativeTo(null);
+
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -52,6 +54,8 @@ public class MainWikiFrame extends JFrame {
         this.client = client;
         if (client != null) {
             setStatusText("온라인 모드");
+        } else {
+            setStatusText("오프라인 모드");
         }
     }
 
@@ -67,7 +71,11 @@ public class MainWikiFrame extends JFrame {
         buttonPanel.setOpaque(false);
 
         JButton addBtn = new JButton("지식 추가/수정");
-        addBtn.addActionListener(e -> new ConceptEditFrame(this, repository));
+        // 기존 버튼 의미를 유지: 선택 항목 있으면 수정, 없으면 추가
+        addBtn.addActionListener(e -> {
+            Concept selected = resultList != null ? resultList.getSelectedValue() : null;
+            new ConceptEditFrame(this, repository, selected);
+        });
 
         JButton deleteBtn = new JButton("지식 삭제");
         deleteBtn.setBackground(new Color(231, 76, 60));
@@ -78,9 +86,17 @@ public class MainWikiFrame extends JFrame {
                 JOptionPane.showMessageDialog(this, "삭제할 항목을 먼저 선택해주세요.");
                 return;
             }
-            if (JOptionPane.showConfirmDialog(this, "'" + selected.getTitle() + "' 삭제할까요?", "삭제 확인", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            int answer = JOptionPane.showConfirmDialog(
+                    this,
+                    "'" + selected.getTitle() + "' 삭제할까요?",
+                    "삭제 확인",
+                    JOptionPane.YES_NO_OPTION
+            );
+            if (answer == JOptionPane.YES_OPTION) {
                 repository.deleteConcept(selected.getId());
-                if (client != null) client.send("DELETE", selected.getId());
+                if (client != null) {
+                    client.send("DELETE", selected.getId());
+                }
                 refreshList();
             }
         });
@@ -92,10 +108,9 @@ public class MainWikiFrame extends JFrame {
         topPanel.add(searchField, BorderLayout.CENTER);
 
         JButton searchButton = new JButton("검색");
-        // 버튼 클릭과 Enter 입력이 같은 검색 메서드를 타게 해서 동작을 일관되게 유지한다.
+        // 버튼 클릭/엔터 입력이 같은 검색 메서드를 타도록 통일
         searchButton.addActionListener(e -> performSearch());
         searchField.addActionListener(e -> performSearch());
-        // 포커스가 검색창 밖에 있어도 Enter가 검색 버튼 액션으로 연결된다.
         getRootPane().setDefaultButton(searchButton);
         topPanel.add(searchButton, BorderLayout.EAST);
 
@@ -118,6 +133,7 @@ public class MainWikiFrame extends JFrame {
     private void initCenterPanel() {
         JPanel leftPanel = new JPanel(new BorderLayout());
         leftPanel.setMinimumSize(new Dimension(420, 0));
+
         JPanel filterPanel = new JPanel(new GridLayout(1, 5, 5, 5));
         filterPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -138,13 +154,14 @@ public class MainWikiFrame extends JFrame {
         resultList = new JList<>(listModel);
         resultList.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
         resultList.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) displayDetail(resultList.getSelectedValue());
+            if (!e.getValueIsAdjusting()) {
+                displayDetail(resultList.getSelectedValue());
+            }
         });
-
         leftPanel.add(new JScrollPane(resultList), BorderLayout.CENTER);
 
         JPanel rightPanel = new JPanel(new BorderLayout(0, 10));
-        scrollPane = new JScrollPane(new JLabel("카테고리를 선택하거나 검색해 주세요.", SwingConstants.CENTER));
+        scrollPane = new JScrollPane(new JLabel("카테고리를 선택하거나 검색해 주세요", SwingConstants.CENTER));
         scrollPane.setBorder(BorderFactory.createTitledBorder("상세 지식"));
         rightPanel.add(scrollPane, BorderLayout.CENTER);
 
@@ -160,7 +177,6 @@ public class MainWikiFrame extends JFrame {
         chatInput.addActionListener(e -> {
             String msg = chatInput.getText().trim();
             if (!msg.isEmpty() && client != null) {
-                // 닉네임 접두사는 WikiClient에서만 붙인다(중복 [나] 방지).
                 client.send("CHAT", msg);
                 chatInput.setText("");
             }
@@ -173,12 +189,13 @@ public class MainWikiFrame extends JFrame {
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
         splitPane.setResizeWeight(0.4);
         splitPane.setDividerLocation(420);
-
         add(splitPane, BorderLayout.CENTER);
     }
 
     private void displayDetail(Concept selected) {
-        if (selected == null) return;
+        if (selected == null) {
+            return;
+        }
 
         JPanel detailPanel = new JPanel();
         detailPanel.setLayout(new BoxLayout(detailPanel, BoxLayout.Y_AXIS));
@@ -202,22 +219,26 @@ public class MainWikiFrame extends JFrame {
         detailPanel.add(sep);
         detailPanel.add(Box.createVerticalStrut(10));
 
-        for (String line : selected.getDescriptionLines()) {
-            JLabel label = new JLabel();
+        for (String rawLine : selected.getDescriptionLines()) {
+            String line = rawLine == null ? "" : rawLine.trim();
+            if (line.isEmpty()) {
+                continue;
+            }
+
+            JLabel label = new JLabel(stripTag(line));
             label.setAlignmentX(Component.LEFT_ALIGNMENT);
-            if (line.startsWith("[H2]")) {
-                label.setText(line.replace("[H2] ", ""));
+
+            if (isHeadingLine(line)) {
                 label.setFont(new Font("맑은 고딕", Font.BOLD, 19));
                 label.setForeground(new Color(44, 62, 80));
                 detailPanel.add(Box.createVerticalStrut(10));
-            } else if (line.startsWith("[코드]")) {
-                label.setText(line.replace("[코드] ", ""));
+            } else if (isCodeLine(line)) {
                 label.setForeground(Color.BLUE);
-                label.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+                label.setFont(new Font("Consolas", Font.BOLD, 15));
             } else {
-                label.setText(line.replace("[설명] ", ""));
                 label.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
             }
+
             detailPanel.add(label);
             detailPanel.add(Box.createVerticalStrut(7));
         }
@@ -229,16 +250,79 @@ public class MainWikiFrame extends JFrame {
         scrollPane.repaint();
     }
 
+    // 상세 렌더링에서 heading 라인을 분기하기 위한 헬퍼
+    private boolean isHeadingLine(String line) {
+        return line.toUpperCase(Locale.ROOT).startsWith("[H2]");
+    }
+
+    // 기존 [코드] 포맷 + 영문 [CODE] 포맷을 함께 인식해 색상 규칙을 유지한다.
+    private boolean isCodeLine(String line) {
+        String upper = line.toUpperCase(Locale.ROOT);
+        return upper.startsWith("[CODE]") || line.startsWith("[코드]");
+    }
+
+    // 화면에는 태그를 숨기고 본문 텍스트만 노출한다.
+    private String stripTag(String line) {
+        int right = line.indexOf(']');
+        if (line.startsWith("[") && right > 0 && right + 1 < line.length()) {
+            return line.substring(right + 1).trim();
+        }
+        if (line.startsWith("[") && right > 0) {
+            return "";
+        }
+        return line;
+    }
+
     private void filterList(String category) {
         List<Concept> all = repository.findAll();
         listModel.clear();
+
         for (Concept c : all) {
-            if (category.equals("전체")) {
-                if (!c.getCategory().equals("메소드")) listModel.addElement(c);
-            } else if (c.getCategory().equals(category)) {
+            String conceptCategory = normalizeCategory(c);
+
+            if ("전체".equals(category)) {
+                if (!"메소드".equals(conceptCategory)) {
+                    listModel.addElement(c);
+                }
+                continue;
+            }
+
+            if (category.equals(conceptCategory)) {
                 listModel.addElement(c);
             }
         }
+    }
+
+    // 데이터 소스의 category 값 변형(한글/영문/ID prefix)을 필터 기준으로 정규화한다.
+    private String normalizeCategory(Concept c) {
+        String id = c.getId() == null ? "" : c.getId().trim().toUpperCase(Locale.ROOT);
+        if (id.startsWith("M")) {
+            return "메소드";
+        }
+        if (id.startsWith("B")) {
+            return "기초";
+        }
+        if (id.startsWith("I")) {
+            return "중급";
+        }
+        if (id.startsWith("A")) {
+            return "고급";
+        }
+
+        String cat = c.getCategory() == null ? "" : c.getCategory().trim().toLowerCase(Locale.ROOT);
+        if (cat.contains("method") || cat.contains("메소드")) {
+            return "메소드";
+        }
+        if (cat.contains("basic") || cat.contains("기초")) {
+            return "기초";
+        }
+        if (cat.contains("intermediate") || cat.contains("중급")) {
+            return "중급";
+        }
+        if (cat.contains("advanced") || cat.contains("고급")) {
+            return "고급";
+        }
+        return c.getCategory();
     }
 
     private void performSearch() {
@@ -251,7 +335,7 @@ public class MainWikiFrame extends JFrame {
             if (best != null) {
                 JOptionPane.showMessageDialog(
                         this,
-                        "검색 결과가 없습니다. 추천어: " + best.getTitle(),
+                        "검색 결과가 없습니다. 추천: " + best.getTitle(),
                         "검색 안내",
                         JOptionPane.INFORMATION_MESSAGE
                 );
@@ -262,16 +346,17 @@ public class MainWikiFrame extends JFrame {
     public void updateList(List<Concept> concepts) {
         SwingUtilities.invokeLater(() -> {
             listModel.clear();
-            for (Concept c : concepts) listModel.addElement(c);
+            for (Concept c : concepts) {
+                listModel.addElement(c);
+            }
         });
     }
 
     public void applyServerData(List<Concept> concepts) {
-        // 서버의 최신 전체 목록으로 로컬 저장소를 먼저 맞춰야 이후 검색/필터도 최신 데이터 기준이 된다.
+        // 서버 최신 목록으로 repository를 갱신한 뒤, 현재 UI 상태(검색/필터)를 유지한다.
         repository.replaceAll(concepts);
         SwingUtilities.invokeLater(() -> {
             String keyword = searchField != null ? searchField.getText().trim() : "";
-            // 사용자가 검색 중이면 검색 결과 상태를 유지, 아니면 카테고리 필터 상태를 유지한다.
             if (!keyword.isEmpty()) {
                 updateList(searchService.search(keyword));
             } else {
@@ -281,7 +366,7 @@ public class MainWikiFrame extends JFrame {
     }
 
     private void initStatusBar() {
-        statusLabel = new JLabel("오프라인모드");
+        statusLabel = new JLabel("오프라인 모드");
         add(statusLabel, BorderLayout.SOUTH);
     }
 
@@ -292,10 +377,12 @@ public class MainWikiFrame extends JFrame {
     }
 
     public void onDataAdded(Concept c) {
-        // 오프라인 상태에서도 즉시 반영되도록 로컬 저장소에 먼저 저장한다.
+        // ConceptEditFrame(추가/수정)의 공통 반영 지점
         repository.addConcept(c);
-        // 온라인이면 서버에 동일 이벤트를 보내 다른 클라이언트도 갱신되게 한다.
-        if (client != null) client.send("ADD", c);
+        if (client != null) {
+            // 온라인이면 서버에도 동일 이벤트를 보내 전체 클라이언트와 동기화
+            client.send("ADD", c);
+        }
         refreshList();
     }
 }
